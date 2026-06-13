@@ -23,7 +23,7 @@ float tanh_derivative(float x) {
     return 1 - t * t;
 }
 
-float sigmoid(float x){
+float sigmoid(float x) {
     return 1 / (1 + exp(-x));
 }
 
@@ -61,8 +61,7 @@ int main() {
     float z3[4] = {0.0, 0.0, 0.0, 0.0};
     float z3_sigmoid[4] = {0.0, 0.0, 0.0, 0.0};
 
-    for (int n = 0; n < num_steps; n++)
-    {
+    for (int n=0; n<num_steps; n++) {
         float losses[4] = {0.0, 0.0, 0.0, 0.0};
         float loss = 0.0;
 
@@ -70,8 +69,7 @@ int main() {
         zero_grads(w2, &b2, 2);
         zero_grads(w3, &b3, 2);
 
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i=0; i<4; i++) {
             z1[i] = 0.0;
             z1_tanh[i] = 0.0;
             z2[i] = 0.0;
@@ -79,7 +77,7 @@ int main() {
             z3[i] = 0.0;
             z3_sigmoid[i] = 0.0;
 
-            for (int j = 0; j < 2; j++){
+            for (int j=0; j<2; j++) {
                 z1[i] += x[i][j] * w1[j].data;
                 z2[i] += x[i][j] * w2[j].data;
             }
@@ -100,21 +98,19 @@ int main() {
             losses[i] = -(y[i] * logf(p) + (1.0f - y[i]) * logf(1.0f - p));
         }
 
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i=0; i<4; i++) {
             loss += losses[i];
         }
         loss /= 4;
 
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i=0; i<4; i++) {
             float dLdZ3 = (z3_sigmoid[i] - y[i]) / 4.0f;
 
             float dLdW31 = dLdZ3 * z1_tanh[i];
             float dLdW32 = dLdZ3 * z2_tanh[i];
+
             w3[0].grad += dLdW31;
             w3[1].grad += dLdW32;
-
             b3.grad += dLdZ3;
 
             float dLdZ1_tanh = dLdZ3 * w3[0].data;
@@ -133,8 +129,7 @@ int main() {
             b2.grad += dLdZ2;
         }
 
-        for (int i = 0; i < 2; i++)
-        {
+        for (int i=0; i<2; i++) {
             w1[i].data -= .3 * w1[i].grad;
             w2[i].data -= .3 * w2[i].grad;
             w3[i].data -= .3 * w3[i].grad;
